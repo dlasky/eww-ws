@@ -24,6 +24,8 @@ Example Eww Configuration:
 
 # Currently Supported:
 
+Single Monitor only -- will be exploring how to support this better in the near future
+
 - [x] Hyprland
 - [ ] Sway
 - [ ] River

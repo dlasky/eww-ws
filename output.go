@@ -7,13 +7,13 @@ import (
 
 type Workspace struct {
 	IsActive bool   `json:"is_active"`
-	ID       int64  `json:"id,omitempty"`
+	ID       int    `json:"id,omitempty"`
 	Name     string `json:"name,omitempty"`
 	Monitor  string `json:"monitor,omitempty"`
 }
 
 type Workspaces struct {
-	Active     int64       `json:"active,omitempty"`
+	Active     int         `json:"active,omitempty"`
 	Workspaces []Workspace `json:"workspaces,omitempty"`
 }
 

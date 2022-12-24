@@ -24,9 +24,17 @@ func (h Hyperland) listen() error {
 		log.Fatal("ws parse", err)
 	}
 
+	active, err := h.getActiveWorkspace()
+	if err != nil {
+		return err
+	}
+
 	w := Workspaces{
-		Active:     0,
+		Active:     active,
 		Workspaces: ws,
+	}
+	for i, ws := range w.Workspaces {
+		w.Workspaces[i].IsActive = ws.ID == active
 	}
 
 	w.toJson()
@@ -46,9 +54,9 @@ func (h Hyperland) listen() error {
 		switch parts[0] {
 		case "workspace":
 			ID, _ := strconv.ParseInt(strings.Trim(parts[1], " \n"), 10, 64)
-			w.Active = ID
+			w.Active = int(ID)
 			for i, ws := range w.Workspaces {
-				w.Workspaces[i].IsActive = ws.ID == ID
+				w.Workspaces[i].IsActive = ws.ID == int(ID)
 			}
 			w.toJson()
 		case "destroyworkspace":
@@ -74,6 +82,47 @@ func (h Hyperland) listen() error {
 		}
 
 	}
+}
+
+type HyperlandMonitors struct {
+	ID              int     `json:"id"`
+	Name            string  `json:"name"`
+	Description     string  `json:"description"`
+	Width           int     `json:"width"`
+	Height          int     `json:"height"`
+	RefreshRate     float64 `json:"refreshRate"`
+	X               int     `json:"x"`
+	Y               int     `json:"y"`
+	ActiveWorkspace struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"activeWorkspace"`
+	Reserved   []int   `json:"reserved"`
+	Scale      float64 `json:"scale"`
+	Transform  int     `json:"transform"`
+	Focused    bool    `json:"focused"`
+	DpmsStatus bool    `json:"dpmsStatus"`
+}
+
+func (h Hyperland) getActiveWorkspace() (int, error) {
+	ctl, err := net.Dial("unix", "/tmp/hypr/"+h.sig+"/.socket.sock")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer ctl.Close()
+	// apparently hyperctl internally sends arguments as arg / command
+	// https://sourcegraph.com/github.com/hyprwm/Hyprland/-/blob/src/debug/HyprCtl.cpp?L879
+	ctl.Write([]byte("j/monitors"))
+	byt, err := io.ReadAll(ctl)
+	if err != nil {
+		return 0, err
+	}
+	monitors := []HyperlandMonitors{}
+	err = json.Unmarshal(byt, &monitors)
+	if err != nil {
+		return 0, err
+	}
+	return monitors[0].ActiveWorkspace.ID, nil
 }
 
 func (h Hyperland) getWorkspaces() ([]Workspace, error) {
