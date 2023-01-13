@@ -27,5 +27,10 @@ Example Eww Configuration:
 Single Monitor only -- will be exploring how to support this better in the near future
 
 - [x] Hyprland
-- [ ] Sway
+- [x] Sway
 - [ ] River
+
+# TODO:
+
+- [ ] Multi Monitor
+- [ ] WM agnostic 'switch to' workspace command
