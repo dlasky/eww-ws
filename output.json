@@ -1,0 +1,15 @@
+{
+  "active": 3,
+  "workspaces": [
+    { "is_active": false, "id": 1, "name": "1", "monitor": "eDP-1"},
+    { "is_active": false, "id": 2, "name": "2", "monitor": "eDP-1" },
+    { "is_active": true, "id": 3, "name": "3", "monitor": "eDP-1" },
+    { "is_active": false, "id": 6, "name": "6", "monitor": "eDP-1" }
+  ],
+  "workspaces_by_monitor":[
+    [{ "is_active": false, "id": 1, "name": "1", "monitor": "eDP-1"},
+    { "is_active": false, "id": 2, "name": "2", "monitor": "eDP-1" },
+    { "is_active": true, "id": 3, "name": "3", "monitor": "eDP-1" },
+    { "is_active": false, "id": 6, "name": "6", "monitor": "eDP-1" }]
+  ]
+}

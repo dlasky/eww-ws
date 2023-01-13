@@ -16,6 +16,10 @@ type Hyperland struct {
 	sig string
 }
 
+func (h Hyperland) detect() bool {
+	return os.Getenv("HYPERLAND_INSTANCE_SIGNATURE") != ""
+}
+
 func (h Hyperland) listen() error {
 	h.sig = os.Getenv("HYPRLAND_INSTANCE_SIGNATURE")
 
