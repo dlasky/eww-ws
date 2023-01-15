@@ -17,7 +17,7 @@ type Hyperland struct {
 }
 
 func (h Hyperland) detect() bool {
-	return os.Getenv("HYPERLAND_INSTANCE_SIGNATURE") != ""
+	return os.Getenv("HYPRLAND_INSTANCE_SIGNATURE") != ""
 }
 
 func (h Hyperland) listen() error {
