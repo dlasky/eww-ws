@@ -2,18 +2,19 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/joshuarubin/go-sway"
 )
 
-type Handler struct {
+type WSEHandler struct {
 	sway.EventHandler
 	s Sway
 }
 
-func (h *Handler) WorkspaceEvent(ctx context.Context, evt sway.WindowEvent) {
+func (h WSEHandler) Workspace(ctx context.Context, evt sway.WorkspaceEvent) {
 	var active = 0
 	ws, err := h.s.getWorkspaces()
 	if err != nil {
@@ -41,7 +42,8 @@ func (s Sway) detect() bool {
 }
 
 func (s Sway) listen() error {
-	client, err := sway.New(context.Background())
+	ctx := context.Background()
+	client, err := sway.New(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,12 +66,11 @@ func (s Sway) listen() error {
 	}
 	w.toJson()
 
-	h := Handler{
+	h := WSEHandler{
 		s: s,
 	}
-
-	sway.Subscribe(context.Background(), h, sway.EventTypeWorkspace)
-	return nil
+	fmt.Println("things")
+	return sway.Subscribe(ctx, h, sway.EventTypeWorkspace)
 }
 
 func (s Sway) getWorkspaces() ([]Workspace, error) {
