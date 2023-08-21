@@ -10,7 +10,7 @@ The tool relies on the `def listen` feature of EWW to stream updates as needed. 
 Example Eww Configuration:
 
 ```
-(deflisten SPACES :initial '{"":0,"workspaces":[]}' "~/.config/eww/scripts/eww-ws")
+(deflisten SPACES :initial '{"active":0,"workspaces":[]}' "~/.config/eww/scripts/eww-ws")
 
 (defwidget ws []
   (box :class "workspaces"
