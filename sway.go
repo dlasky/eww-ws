@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
@@ -69,7 +68,6 @@ func (s Sway) listen() error {
 	h := WSEHandler{
 		s: s,
 	}
-	fmt.Println("things")
 	return sway.Subscribe(ctx, h, sway.EventTypeWorkspace)
 }
 
