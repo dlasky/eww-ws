@@ -14,6 +14,7 @@ import (
 
 type Hyperland struct {
 	sig string
+	runtimeDir string
 }
 
 func (h Hyperland) detect() bool {
@@ -22,6 +23,7 @@ func (h Hyperland) detect() bool {
 
 func (h Hyperland) listen() error {
 	h.sig = os.Getenv("HYPRLAND_INSTANCE_SIGNATURE")
+	h.runtimeDir = os.Getenv("XDG_RUNTIME_DIR")
 
 	ws, err := h.getWorkspaces()
 	if err != nil {
@@ -44,7 +46,7 @@ func (h Hyperland) listen() error {
 	w.toJson()
 
 	//emulating hypr itself which hardcodes the /tmp
-	ctl, err := net.Dial("unix", "/tmp/hypr/"+h.sig+"/.socket2.sock")
+	ctl, err := net.Dial("unix", h.runtimeDir+"/hypr/"+h.sig+"/.socket2.sock")
 	if err != nil {
 		return err
 	}
@@ -109,7 +111,7 @@ type HyperlandMonitors struct {
 }
 
 func (h Hyperland) getActiveWorkspace() (int, error) {
-	ctl, err := net.Dial("unix", "/tmp/hypr/"+h.sig+"/.socket.sock")
+	ctl, err := net.Dial("unix", h.runtimeDir+"/hypr/"+h.sig+"/.socket.sock")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -132,7 +134,7 @@ func (h Hyperland) getActiveWorkspace() (int, error) {
 func (h Hyperland) getWorkspaces() ([]Workspace, error) {
 	ws := []Workspace{}
 
-	ctl, err := net.Dial("unix", "/tmp/hypr/"+h.sig+"/.socket.sock")
+	ctl, err := net.Dial("unix", h.runtimeDir+"/hypr/"+h.sig+"/.socket.sock")
 	if err != nil {
 		log.Fatal(err)
 	}
