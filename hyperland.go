@@ -150,7 +150,15 @@ func (h Hyperland) getWorkspaces() ([]Workspace, error) {
 	if err != nil {
 		return nil, err
 	}
-	var st SortWorkspaces = ws
+
+	wsNormal := []Workspace{}
+	for _, w := range ws {
+		if w.Name != "special:magic" {
+			wsNormal = append(wsNormal, w)
+		}
+	}
+
+	var st SortWorkspaces = wsNormal
 	sort.Sort(st)
 
 	return st, nil
