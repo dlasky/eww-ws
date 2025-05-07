@@ -2,7 +2,7 @@
 
 A simple binary that supports updating workspaces as a variable in [EWW](https://github.com/elkowar/eww/).
 
-The goal of this project is to support a consistent JSON format for workspaces in EWW regardless of the window manager. We will also attempt to use IPC interfaces where possible
+The goal of this project is to support a consistent JSON format for workspaces in EWW regardless of the window manager, to enable simpler overall EWW config. We will also attempt to use IPC interfaces where possible
 to avoid comparatively heavy calls to exec like most of the existing 'script' solutions.
 
 Eww-ws relies on the `deflisten` feature of EWW to stream updates as needed. The idea is to avoid polling by using the IPCs of the respective window managers to determine which workspace is active and emit a json object for eww.
