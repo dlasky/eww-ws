@@ -2,23 +2,42 @@
 
 A simple binary that supports updating workspaces as a variable in [EWW](https://github.com/elkowar/eww/).
 
-The goal of this project is to support a consistent JSON format for EWW regardless of WM used, to enable simpler overall EWW config. We will also attempt to use IPC interfaces where possible
+The goal of this project is to support a consistent JSON format for workspaces in EWW regardless of the window manager, to enable simpler overall EWW config. We will also attempt to use IPC interfaces where possible
 to avoid comparatively heavy calls to exec like most of the existing 'script' solutions.
 
-The tool relies on the `def listen` feature of EWW to stream updates as needed. The idea being that we avoid polling by utilizing the IPCs of the respective window managers to determine which workspace is active, then we emit an update json object which eww picks up.
+Eww-ws relies on the `deflisten` feature of EWW to stream updates as needed. The idea is to avoid polling by using the IPCs of the respective window managers to determine which workspace is active and emit a json object for eww.
 
 Example Eww Configuration:
 
-```
-(deflisten SPACES :initial '{"active":0,"workspaces":[]}' "~/.config/eww/scripts/eww-ws")
+``` lisp
+(deflisten spaces `PATH TO eww-ws`)
 
-(defwidget ws []
+(defwidget workspaces []
   (box :class "workspaces"
-  (for entry in "${SPACES.workspaces}"
-    (button :onclick "hyprctl dispatch workspace ${entry.id}"
-      "${entry.name}"))
+  (for ws in "${spaces.workspaces}"
+    (eventbox
+        :width 30
+        :class "${ws.is_active ? "active": ''}"
+        :onclick "hyprctl dispatch workspace ${ws.id}"
+      "${ws.name}"))
   ))
 
+```
+
+Example styling:
+
+```scss
+.workspaces {
+  color: #928374;
+  background-color: #232323;
+  font-weight: bold;
+
+  .active {
+    color: #89b482;
+    border-top: 3px solid #89b482;
+    background-color: #141414;
+  }
+}
 ```
 
 # Currently Supported:
